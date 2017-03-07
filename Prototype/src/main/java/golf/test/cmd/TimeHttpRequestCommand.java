@@ -33,12 +33,19 @@ public class TimeHttpRequestCommand extends HystrixCommand<String> {
 
 	private CloseableHttpClient client;
 	
+	/**
+	 * Each Hystrix command represents a circuit breaker, which is assigned a thread pool (or shared
+	 * thread pool - shared on key which is default the Command name)
+	 */
 	public TimeHttpRequestCommand(CloseableHttpClient client) {
-		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CMD_NAME+"-Pool"))
+		//Assign name to the thread pool
+		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(CMD_NAME+"-Pool")) 
 				.andCommandKey(HystrixCommandKey.Factory.asKey(CMD_NAME))
 				.andThreadPoolPropertiesDefaults(
+						//Set size of the pool
 						HystrixThreadPoolProperties.Setter().withCoreSize(THREAD_POOL_SIZE))
 				.andCommandPropertiesDefaults(
+						//Set the allowed execution time of the command, before the fallback mechanism is activated
 						HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(ALLOWED_EXC_TIME_MS)));
 		
 		this.client = client;

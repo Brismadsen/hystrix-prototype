@@ -7,8 +7,10 @@ import golf.test.client.PoolingConnectionManager;
 
 public class CloseableHttpClientFactory implements Factory<CloseableHttpClient> {
 
+	//Timeout for establishing the connection
 	public static final int CONNECT_TIMEOUT = 1500;
 	
+	//Timeout when connection has been established.
 	public static final int SOCKET_TIMEOUT = 1500;
 	
 	private static PoolingConnectionManager manager = null;
